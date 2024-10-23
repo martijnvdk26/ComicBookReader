@@ -1,5 +1,7 @@
 package UI;
 
+import Classes.ButtonControl;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,11 +17,9 @@ public class FrontPage {
     public FrontPage(){
         mainPanel = new JPanel (new BorderLayout());
 
-
         // Padding labels
         recentItems.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 275));
         option.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 
         // Grootte van de buttons
         Dimension buttonSize = new Dimension(150, 30);
@@ -45,7 +45,8 @@ public class FrontPage {
         mainPanel.add(buttonPanel, BorderLayout.WEST);
         mainPanel.add(listPanel, BorderLayout.CENTER);
 
-
+        // Initialize ButtonController
+        new ButtonControl(button1, button2, button3);
     }
 
     public static void main(String[] args) {
