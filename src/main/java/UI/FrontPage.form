@@ -36,8 +36,8 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <label value="Comic Openen"/>
-          <text value="Comic Openen"/>
+          <label value="Bibliotheek"/>
+          <text value="Bibliotheek"/>
         </properties>
       </component>
       <component id="8b5da" class="javax.swing.JButton" binding="button2" default-binding="true">
@@ -49,15 +49,6 @@
           <text value="Comic Importeren"/>
         </properties>
       </component>
-      <component id="f8719" class="javax.swing.JButton" binding="button3" default-binding="true">
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <label value="Comic Verwijderen"/>
-          <text value="Comic Verwijderen"/>
-        </properties>
-      </component>
       <component id="6e0bd" class="javax.swing.JList" binding="list1" default-binding="true">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -65,6 +56,14 @@
           </grid>
         </constraints>
         <properties/>
+      </component>
+      <component id="6525b" class="javax.swing.JButton" binding="closeButton">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Afsluiten"/>
+        </properties>
       </component>
     </children>
   </grid>

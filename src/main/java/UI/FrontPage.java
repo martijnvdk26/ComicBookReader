@@ -11,28 +11,28 @@ public class FrontPage {
     private JLabel option;
     private JButton button1;
     private JButton button2;
-    private JButton button3;
+    private JButton closeButton;
     private JList list1;
 
     public FrontPage(){
-        mainPanel = new JPanel (new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
 
         // Padding labels
         recentItems.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 275));
         option.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Grootte van de buttons
-        Dimension buttonSize = new Dimension(150, 30);
+        Dimension buttonSize = new Dimension(100, 25); // Shrink the button size
         button1.setPreferredSize(buttonSize);
         button2.setPreferredSize(buttonSize);
-        button3.setPreferredSize(buttonSize);
+        closeButton.setPreferredSize(buttonSize); // Set size for closeButton
 
         // Panel voor de buttons
         JPanel buttonPanel = new JPanel(new BorderLayout());
-        JPanel buttons = new JPanel(new GridLayout(3,1));
+        JPanel buttons = new JPanel(new GridLayout(3, 1)); // Adjust grid layout to fit 3 buttons
         buttons.add(button1);
         buttons.add(button2);
-        buttons.add(button3);
+        buttons.add(closeButton); // Add closeButton to the panel
         buttonPanel.add(option, BorderLayout.NORTH);
         buttonPanel.add(buttons, BorderLayout.CENTER);
 
@@ -46,7 +46,7 @@ public class FrontPage {
         mainPanel.add(listPanel, BorderLayout.CENTER);
 
         // Initialize ButtonController
-        new ButtonControl(button1, button2, button3);
+        new ButtonControl(button1, button2, closeButton);
     }
 
     public static void main(String[] args) {
