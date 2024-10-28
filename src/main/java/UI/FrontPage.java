@@ -22,7 +22,7 @@ public class FrontPage {
         option.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Grootte van de buttons
-        Dimension buttonSize = new Dimension(100, 25); // Shrink the button size
+        Dimension buttonSize = new Dimension(150, 20); // Shrink the button size
         button1.setPreferredSize(buttonSize);
         button2.setPreferredSize(buttonSize);
         closeButton.setPreferredSize(buttonSize); // Set size for closeButton
