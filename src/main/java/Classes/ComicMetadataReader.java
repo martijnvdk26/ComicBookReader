@@ -33,13 +33,23 @@ public class ComicMetadataReader {
                         String name = rootNode.path("name").asText();
                         String author = rootNode.path("authors").asText();
                         String tags = rootNode.path("tags").toString();
-                        String path = file.getParent(); // Define the path variable
-                        metadataList.add(new ComicMetadata(name, author, tags, path));
+                        String path = file.getParent();
+                        String coverImagePath = findCoverImage(path); // Find the cover image
+                        metadataList.add(new ComicMetadata(name, author, tags, coverImagePath, path));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }
+    }
+
+    private String findCoverImage(String directoryPath) {
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles((dir, name) -> name.matches("(?i).*\\.(jpg|jpeg|png|gif)"));
+        if (files != null && files.length > 0) {
+            return files[0].getAbsolutePath(); // Take the first image as the cover
+        }
+        return null;
     }
 }

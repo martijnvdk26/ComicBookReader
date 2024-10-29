@@ -4,14 +4,16 @@ public class ComicMetadata {
     private String name;
     private String author;
     private String tags;
-    private String path;
+    private String coverImagePath;
+    private String directoryPath;
 
     // Constructor
-    public ComicMetadata(String name, String author, String tags, String path) {
+    public ComicMetadata(String name, String author, String tags, String coverImagePath, String directoryPath) {
         this.name = name;
         this.author = author;
         this.tags = tags;
-        this.path = path;
+        this.coverImagePath = coverImagePath;
+        this.directoryPath = directoryPath;
     }
 
     // Getters
@@ -27,7 +29,11 @@ public class ComicMetadata {
         return tags;
     }
 
-    public String getPath() {
-        return path;
+    public String getCoverImagePath() {
+        return coverImagePath;
+    }
+
+    public String getDirectoryPath() {
+        return directoryPath;
     }
 }

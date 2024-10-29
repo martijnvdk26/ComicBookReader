@@ -5,31 +5,57 @@ import Classes.ComicMetadataReader;
 import Classes.deleteComic;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 public class ComicOverview {
     private JPanel mainPanel;
     private JScrollPane comicScroll;
-    private final JTable comicTable;
+    private final JPanel comicPanel;
     private JButton deleteButton;
-    private final DefaultTableModel tableModel;
-    private JFileChooser fileChooser;
+    private final JFileChooser fileChooser;
 
     public ComicOverview() {
         // Read metadata from the directory
         ComicMetadataReader reader = new ComicMetadataReader();
         List<ComicMetadata> comics = reader.readMetadata("S:/ComicBookReader");
 
-        // Initialize the JTable with comic metadata
-        tableModel = new DefaultTableModel(new Object[]{"Name", "Author(s)", "Tags", "Path"}, 0);
+        // Initialize the panel for the comics
+        comicPanel = new JPanel();
+        comicPanel.setLayout(new GridLayout(0, 3, 10, 10)); // Grid layout with 3 columns
+
+        // Add the comics to the panel
         for (ComicMetadata comic : comics) {
-            tableModel.addRow(new Object[]{comic.getName(), comic.getAuthor(), comic.getTags(), comic.getPath()});
+            JPanel comicItemPanel = new JPanel();
+            comicItemPanel.setLayout(new BorderLayout());
+
+            // Add the cover image from the metadata
+            ImageIcon coverIcon = scaleImageIcon(comic.getCoverImagePath(), 150, 200);
+            if (coverIcon != null) {
+                JLabel coverLabel = new JLabel(coverIcon);
+                comicItemPanel.add(coverLabel, BorderLayout.CENTER);
+            } else {
+                JLabel coverLabel = new JLabel("No Image Available");
+                comicItemPanel.add(coverLabel, BorderLayout.CENTER);
+            }
+
+            // Add the metadata
+            JLabel metadataLabel = new JLabel("<html>Name: " + comic.getName() + "<br>Author: " + comic.getAuthor() + "<br>Tags: " + comic.getTags() + "</html>");
+            comicItemPanel.add(metadataLabel, BorderLayout.NORTH);
+
+            // Add the read button
+            JButton readButton = new JButton("Lezen");
+            readButton.addActionListener(e -> {
+                openImageInNewWindow(comic.getDirectoryPath());
+            });
+            comicItemPanel.add(readButton, BorderLayout.SOUTH);
+
+            comicPanel.add(comicItemPanel);
         }
-        comicTable = new JTable(tableModel);
-        comicTable.removeColumn(comicTable.getColumnModel().getColumn(3)); // Hide the path column
 
         // Initialize the delete button
         deleteButton = new JButton("Comic Verwijderen");
@@ -40,55 +66,94 @@ public class ComicOverview {
 
         // Add action listener to the delete button
         deleteButton.addActionListener(e -> {
-            int selectedRow = comicTable.getSelectedRow();
-            if (selectedRow != -1) {
-                // Delete comic from table selection
-                String comicPath = (String) tableModel.getValueAt(selectedRow, 3);
+            // Open the file chooser to select a directory
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedDirectory = fileChooser.getSelectedFile();
                 deleteComic deleter = new deleteComic();
-                if (deleter.deleteComicFile(comicPath)) {
-                    tableModel.removeRow(selectedRow);
-                    JOptionPane.showMessageDialog(null, "Comic succesvol verwijderd.");
-                    refreshTable();
+                if (deleter.deleteComicFile(selectedDirectory.getAbsolutePath())) {
+                    JOptionPane.showMessageDialog(null, "Comic map succesvol verwijderd.");
+                    refreshPanel();
                 } else {
                     JOptionPane.showMessageDialog(null, "Verwijderen mislukt.");
-                }
-            } else {
-                // Open file chooser to select directory
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedDirectory = fileChooser.getSelectedFile();
-                    deleteComic deleter = new deleteComic();
-                    if (deleter.deleteComicFile(selectedDirectory.getAbsolutePath())) {
-                        JOptionPane.showMessageDialog(null, "Comic map succesvol verwijderd.");
-                        refreshTable();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Verwijderen mislukt.");
-                    }
                 }
             }
         });
 
         // Set layout for mainPanel
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setPreferredSize(new Dimension(600, 480));
+        mainPanel.setPreferredSize(new Dimension(800, 600)); // Larger window
 
         // Add components to the mainPanel
-        comicScroll = new JScrollPane(comicTable);
+        comicScroll = new JScrollPane(comicPanel);
         mainPanel.add(comicScroll, BorderLayout.CENTER);
         mainPanel.add(deleteButton, BorderLayout.SOUTH);
     }
 
-    private void refreshTable() {
-        // Clear the table
-        tableModel.setRowCount(0);
+    private void refreshPanel() {
+        // Remove all components from the panel
+        comicPanel.removeAll();
 
         // Read metadata from the directory
         ComicMetadataReader reader = new ComicMetadataReader();
         List<ComicMetadata> comics = reader.readMetadata("S:/ComicBookReader");
 
-        // Refill the table with updated data
+        // Add the comics again to the panel
         for (ComicMetadata comic : comics) {
-            tableModel.addRow(new Object[]{comic.getName(), comic.getAuthor(), comic.getTags(), comic.getPath()});
+            JPanel comicItemPanel = new JPanel();
+            comicItemPanel.setLayout(new BorderLayout());
+
+            // Add the cover image from the metadata
+            ImageIcon coverIcon = scaleImageIcon(comic.getCoverImagePath(), 150, 200);
+            if (coverIcon != null) {
+                JLabel coverLabel = new JLabel(coverIcon);
+                comicItemPanel.add(coverLabel, BorderLayout.CENTER);
+            } else {
+                JLabel coverLabel = new JLabel("No Image Available");
+                comicItemPanel.add(coverLabel, BorderLayout.CENTER);
+            }
+
+            // Add the metadata
+            JLabel metadataLabel = new JLabel("<html>Name: " + comic.getName() + "<br>Author: " + comic.getAuthor() + "<br>Tags: " + comic.getTags() + "</html>");
+            comicItemPanel.add(metadataLabel, BorderLayout.NORTH);
+
+            // Add the read button
+            JButton readButton = new JButton("Lezen");
+            readButton.addActionListener(e -> {
+                openImageInNewWindow(comic.getDirectoryPath());
+            });
+            comicItemPanel.add(readButton, BorderLayout.SOUTH);
+
+            comicPanel.add(comicItemPanel);
+        }
+
+        // Refresh the panel
+        comicPanel.revalidate();
+        comicPanel.repaint();
+    }
+
+    private void openImageInNewWindow(String comicDirectoryPath) {
+        ComicReadWindow comicReadWindow = new ComicReadWindow(comicDirectoryPath);
+        comicReadWindow.setVisible(true);
+    }
+
+    private ImageIcon scaleImageIcon(String imagePath, int width, int height) {
+        try {
+            File imageFile = new File(imagePath);
+            if (!imageFile.exists()) {
+                System.err.println("Image file does not exist: " + imagePath);
+                return null;
+            }
+            BufferedImage img = ImageIO.read(imageFile);
+            if (img == null) {
+                System.err.println("Failed to read image file: " + imagePath);
+                return null;
+            }
+            Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImg);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -100,7 +165,7 @@ public class ComicOverview {
         JFrame frame = new JFrame("Bibliotheek");
         frame.setContentPane(new ComicOverview().getMainPanel());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(600, 480);
+        frame.setSize(800, 600); // Larger window
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
