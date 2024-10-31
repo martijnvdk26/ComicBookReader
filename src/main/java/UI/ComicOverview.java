@@ -1,3 +1,4 @@
+// ComicOverview.java
 package UI;
 
 import Classes.ComicMetadata;
@@ -50,7 +51,7 @@ public class ComicOverview {
             // Add the read button
             JButton readButton = new JButton("Lezen");
             readButton.addActionListener(e -> {
-                openImageInNewWindow(comic.getDirectoryPath());
+                openImageInNewWindow(comic.getDirectoryPath(), 1); // Pass the starting page number
             });
             comicItemPanel.add(readButton, BorderLayout.SOUTH);
 
@@ -120,7 +121,7 @@ public class ComicOverview {
             // Add the read button
             JButton readButton = new JButton("Lezen");
             readButton.addActionListener(e -> {
-                openImageInNewWindow(comic.getDirectoryPath());
+                openImageInNewWindow(comic.getDirectoryPath(), 1); // Pass the starting page number
             });
             comicItemPanel.add(readButton, BorderLayout.SOUTH);
 
@@ -132,8 +133,8 @@ public class ComicOverview {
         comicPanel.repaint();
     }
 
-    private void openImageInNewWindow(String comicDirectoryPath) {
-        ComicReadWindow comicReadWindow = new ComicReadWindow(comicDirectoryPath);
+    private void openImageInNewWindow(String comicDirectoryPath, int startPage) {
+        ComicReadWindow comicReadWindow = new ComicReadWindow(comicDirectoryPath, startPage);
         comicReadWindow.setVisible(true);
     }
 

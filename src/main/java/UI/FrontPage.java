@@ -1,9 +1,12 @@
+// FrontPage.java
 package UI;
 
 import Classes.ButtonControl;
+import Classes.ProgressManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 public class FrontPage {
     private JPanel mainPanel;
@@ -12,9 +15,9 @@ public class FrontPage {
     private JButton button1;
     private JButton button2;
     private JButton closeButton;
-    private JList list1;
+    private JList<String> recentComicsList;
 
-    public FrontPage(){
+    public FrontPage() {
         mainPanel = new JPanel(new BorderLayout());
 
         // Padding labels
@@ -38,8 +41,10 @@ public class FrontPage {
 
         // Panel voor de recent geopende items
         JPanel listPanel = new JPanel(new BorderLayout());
+        recentComicsList = new JList<>();
+        updateRecentComicsList();
         listPanel.add(recentItems, BorderLayout.NORTH);
-        listPanel.add(new JScrollPane(list1), BorderLayout.CENTER);
+        listPanel.add(new JScrollPane(recentComicsList), BorderLayout.CENTER);
 
         // Onderdelen voor de 'mainPanel'
         mainPanel.add(buttonPanel, BorderLayout.WEST);
@@ -47,6 +52,26 @@ public class FrontPage {
 
         // Initialize ButtonController
         new ButtonControl(button1, button2, closeButton);
+
+        // Add action listener for recent comics list
+        recentComicsList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                String selectedComic = recentComicsList.getSelectedValue();
+                if (selectedComic != null) {
+                    String comicName = selectedComic.split(" - ")[0];
+                    int page = ProgressManager.loadProgress(comicName);
+                    new ComicReadWindow(comicName, page).setVisible(true);
+                }
+            }
+        });
+    }
+
+    private void updateRecentComicsList() {
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (Map.Entry<String, Integer> entry : ProgressManager.getProgressMap().entrySet()) {
+            listModel.addElement(entry.getKey() + " - Page " + entry.getValue());
+        }
+        recentComicsList.setModel(listModel);
     }
 
     public static void main(String[] args) {

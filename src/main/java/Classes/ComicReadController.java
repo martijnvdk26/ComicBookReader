@@ -1,3 +1,4 @@
+// ComicReadController.java
 package Classes;
 
 import UI.ComicReadWindow;
@@ -6,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +17,15 @@ import java.util.List;
 
 public class ComicReadController {
     private final ComicReadWindow comicReadWindow;
-    private int currentPage = 1;
+    private int currentPage;
     private final List<BufferedImage> pages;
 
-    public ComicReadController(ComicReadWindow comicReadWindow, String comicDirectoryPath) {
+    public ComicReadController(ComicReadWindow comicReadWindow, String comicName, int startPage) {
         this.comicReadWindow = comicReadWindow;
-        this.pages = loadPages(new File(comicDirectoryPath));
+        this.pages = loadPages(new File(comicName));
+        this.currentPage = startPage;
         updatePage();
 
-        // Set action listeners for the buttons
         comicReadWindow.getPrevButton().addActionListener(e -> prevPage());
         comicReadWindow.getNextButton().addActionListener(e -> nextPage());
     }
@@ -35,7 +37,7 @@ public class ComicReadController {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    pageList.addAll(loadPages(file)); // Recursively load images from subdirectories
+                    pageList.addAll(loadPages(file));
                 } else if (file.getName().toLowerCase().endsWith(".jpg") || file.getName().toLowerCase().endsWith(".gif") || file.getName().toLowerCase().endsWith(".png")) {
                     try {
                         if (file.getName().toLowerCase().endsWith(".gif")) {
@@ -70,13 +72,16 @@ public class ComicReadController {
 
     private void updatePage() {
         if (!pages.isEmpty()) {
-        BufferedImage currentPageImage = pages.get(currentPage - 1);
-        comicReadWindow.getPageTextField().setText(String.valueOf(currentPage)); // Update the JTextField with the current page number
-        int progress = (int) ((double) currentPage / pages.size() * 100);
-        comicReadWindow.getProgressLabel().setText("Progress: " + progress + "%");
-        comicReadWindow.getImageLabel().setIcon(new ImageIcon(currentPageImage));
+            BufferedImage currentPageImage = pages.get(currentPage - 1);
+            Image scaledImage = currentPageImage.getScaledInstance(800, 900, Image.SCALE_SMOOTH);
+            comicReadWindow.getPageTextField().setText(String.valueOf(currentPage));
+            int progress = (int) ((double) currentPage / pages.size() * 100);
+            comicReadWindow.getProgressLabel().setText("Progress: " + progress + "%");
+            comicReadWindow.getImageLabel().setHorizontalAlignment(SwingConstants.CENTER);
+            comicReadWindow.getImageLabel().setVerticalAlignment(SwingConstants.CENTER);
+            comicReadWindow.getImageLabel().setIcon(new ImageIcon(scaledImage));
         }
-}
+    }
 
     private void prevPage() {
         if (currentPage > 1) {
@@ -90,5 +95,9 @@ public class ComicReadController {
             currentPage++;
             updatePage();
         }
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
     }
 }
