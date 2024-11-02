@@ -52,4 +52,14 @@ public class ComicMetadataReader {
         }
         return null;
     }
+
+    public List <String> getComicNames(String directoryPath){
+        List <String> comicNames = new ArrayList<>();
+        List <ComicMetadata> metadataList = readMetadata(directoryPath);
+        for (ComicMetadata metadata : metadataList){
+            comicNames.add(metadata.getName());
+        }
+        return comicNames;
+    }
+
 }

@@ -2,6 +2,7 @@
 package UI;
 
 import Classes.ButtonControl;
+import Classes.ComicMetadataReader;
 import Classes.ProgressManager;
 
 import javax.swing.*;
@@ -64,6 +65,8 @@ public class FrontPage {
                 }
             }
         });
+
+
     }
 
     private void updateRecentComicsList() {
@@ -73,6 +76,8 @@ public class FrontPage {
         }
         recentComicsList.setModel(listModel);
     }
+
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Martijn's Comic Book Reader");
