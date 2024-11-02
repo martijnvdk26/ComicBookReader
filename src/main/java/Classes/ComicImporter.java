@@ -7,8 +7,19 @@ import com.github.junrar.Archive;
 import com.github.junrar.exception.RarException;
 import com.github.junrar.rarfile.FileHeader;
 
+/*
+  De klasse ComicImporter is verantwoordelijk voor het importeren van stripboeken in verschillende formaten zoals ZIP en RAR.
+  Voor deze opdracht is naast het .nhlcomic bestand ook gekozen voor .cbz en .cbr bestanden. Na eigen onderzoek bleken dit
+  de meest oorkomende formaten van comics te zijn. De klasse ComicImporter is een subklasse van ComicImporterBase en implementeert
+    de abstracte methoden importZipComic en importRarComic. Deze methoden worden aangeroepen vanuit de methode importComic.
+ */
 public class ComicImporter extends ComicImporterBase {
 
+    /**
+     * Importeert een stripboek uit een ZIP-bestand.
+     *
+     * @param file het ZIP-bestand dat geïmporteerd moet worden
+     */
     @Override
     protected void importZipComic(File file) {
         String outputDir = "S:/ComicBookReader/" + file.getName().replaceAll("\\.[^.]+$", "");
@@ -38,6 +49,11 @@ public class ComicImporter extends ComicImporterBase {
         }
     }
 
+    /**
+     * Importeert een stripboek uit een RAR-bestand.
+     *
+     * @param file het RAR-bestand dat geïmporteerd moet worden
+     */
     @Override
     protected void importRarComic(File file) {
         String outputDir = "S:/ComicBookReader";

@@ -1,10 +1,12 @@
-// ProgressManager.java
 package Classes;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * De klasse ProgressManager beheert de voortgang van het lezen van stripboeken.
+ */
 public class ProgressManager {
     private static final String PROGRESS_DIR = "S:/ComicBookReader/comicsProgress";
     private static final String PROGRESS_FILE = PROGRESS_DIR + "/progress.txt";
@@ -14,19 +16,39 @@ public class ProgressManager {
         loadProgress();
     }
 
+    /**
+     * Slaat de voortgang van een stripboek op.
+     *
+     * @param comicName de naam van de strip
+     * @param page het paginanummer dat opgeslagen moet worden
+     */
     public static void saveProgress(String comicName, int page) {
         progressMap.put(comicName, page);
         saveProgressToFile();
     }
 
+    /**
+     * Laadt de voortgang van een stripboek.
+     *
+     * @param comicName de naam van de strip
+     * @return het paginanummer van de voortgang
+     */
     public static int loadProgress(String comicName) {
         return progressMap.getOrDefault(comicName, 1);
     }
 
+    /**
+     * Haalt de voortgangsmap op.
+     *
+     * @return een map met de voortgang van alle stripboeken
+     */
     public static Map<String, Integer> getProgressMap() {
         return progressMap;
     }
 
+    /**
+     * Laadt de voortgangsgegevens uit een bestand.
+     */
     private static void loadProgress() {
         File dir = new File(PROGRESS_DIR);
         if (!dir.exists()) {
@@ -49,6 +71,9 @@ public class ProgressManager {
         }
     }
 
+    /**
+     * Slaat de voortgangsgegevens op in een bestand.
+     */
     private static void saveProgressToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(PROGRESS_FILE))) {
             for (Map.Entry<String, Integer> entry : progressMap.entrySet()) {

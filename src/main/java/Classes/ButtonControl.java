@@ -5,6 +5,7 @@ import UI.ComicOverview;
 import javax.swing.*;
 import java.io.File;
 
+/*Deze code verzorgt de controle op de buttons op de voorpagina, ook wel Front Page genoemd.*/
 public class ButtonControl {
     private final JButton button1;
     private final JButton button2;
@@ -18,6 +19,7 @@ public class ButtonControl {
         addListeners();
     }
 
+    /*Deze methode voegt de listeners toe aan de buttons.*/
     private void addListeners() {
         button1.addActionListener(_ -> openComicOverview());
 
@@ -26,6 +28,7 @@ public class ButtonControl {
         closeButton.addActionListener(_ -> closeApplication());
     }
 
+    /*Deze methode opent de Bibliotheek pagina.*/
     private void openComicOverview() {
         JFrame frame = new JFrame("Comic Overview");
         frame.setContentPane(new ComicOverview().getMainPanel());
@@ -34,6 +37,7 @@ public class ButtonControl {
         frame.setVisible(true);
     }
 
+    /*Deze methode importeert een comic.*/
     private void importComic() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Comic files", "cbr", "cbz", "nhlcomic"));
@@ -45,6 +49,7 @@ public class ButtonControl {
         }
     }
 
+    /* Methode voor het sluiten van de applicatie.*/
     private void closeApplication() {
         System.exit(0);
     }

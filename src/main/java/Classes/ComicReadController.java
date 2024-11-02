@@ -1,4 +1,3 @@
-// ComicReadController.java
 package Classes;
 
 import UI.ComicReadWindow;
@@ -15,11 +14,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * De klasse ComicReadController beheert de logica voor het lezen van stripboeken.
+ */
 public class ComicReadController {
     private final ComicReadWindow comicReadWindow;
     private int currentPage;
     private final List<BufferedImage> pages;
 
+    /**
+     * Constructor voor de ComicReadController klasse.
+     *
+     * @param comicReadWindow het venster waarin de strip wordt weergegeven
+     * @param comicName de naam van de strip
+     * @param startPage de startpagina van de strip
+     */
     public ComicReadController(ComicReadWindow comicReadWindow, String comicName, int startPage) {
         this.comicReadWindow = comicReadWindow;
         this.pages = loadPages(new File(comicName));
@@ -30,6 +39,12 @@ public class ComicReadController {
         comicReadWindow.getNextButton().addActionListener(e -> nextPage());
     }
 
+    /**
+     * Laadt de pagina's van een stripboek uit een directory.
+     *
+     * @param directory de directory waarin de stripboekpagina's zich bevinden
+     * @return een lijst van BufferedImage objecten die de pagina's vertegenwoordigen
+     */
     private List<BufferedImage> loadPages(File directory) {
         List<BufferedImage> pageList = new ArrayList<>();
         File[] files = directory.listFiles();
@@ -54,6 +69,13 @@ public class ComicReadController {
         return pageList;
     }
 
+    /**
+     * Laadt de frames van een GIF-bestand.
+     *
+     * @param gifFile het GIF-bestand
+     * @return een lijst van BufferedImage objecten die de frames van de GIF vertegenwoordigen
+     * @throws IOException als er een fout optreedt bij het lezen van het GIF-bestand
+     */
     private List<BufferedImage> loadGif(File gifFile) throws IOException {
         List<BufferedImage> frames = new ArrayList<>();
         ImageInputStream stream = ImageIO.createImageInputStream(gifFile);
@@ -70,6 +92,9 @@ public class ComicReadController {
         return frames;
     }
 
+    /**
+     * Werkt de huidige pagina bij in het leesvenster.
+     */
     private void updatePage() {
         if (!pages.isEmpty()) {
             BufferedImage currentPageImage = pages.get(currentPage - 1);
@@ -83,6 +108,9 @@ public class ComicReadController {
         }
     }
 
+    /**
+     * Gaat naar de vorige pagina.
+     */
     private void prevPage() {
         if (currentPage > 1) {
             currentPage--;
@@ -90,6 +118,9 @@ public class ComicReadController {
         }
     }
 
+    /**
+     * Gaat naar de volgende pagina.
+     */
     private void nextPage() {
         if (currentPage < pages.size()) {
             currentPage++;
@@ -97,6 +128,11 @@ public class ComicReadController {
         }
     }
 
+    /**
+     * Haalt de huidige pagina op.
+     *
+     * @return het huidige paginanummer
+     */
     public int getCurrentPage() {
         return currentPage;
     }
